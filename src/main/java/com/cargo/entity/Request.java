@@ -52,7 +52,7 @@ public class Request {
     String description;
 
     @Column
-    byte status;
+    int status;
     // 0 - new
     // 1 - current
     // 2 - archive

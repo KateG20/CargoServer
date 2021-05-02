@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface RequestRepository extends JpaRepository<Request, Long> {
-    @Query(value = "SELECT * FROM request WHERE request.status = 0", nativeQuery = true)
-    List<Request> findNew();
+    @Query(value = "SELECT * FROM request WHERE request.status = %1", nativeQuery = true)
+    List<Request> findRequests(int status);
 }

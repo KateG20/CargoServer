@@ -11,7 +11,12 @@ public class RequestServiceImpl implements RequestService {
     private RequestRepository requestRepository;
 
     @Override
-    public List<Request> findNew() {
-        return requestRepository.findAll();
+    public List<Request> findRequests(int status) {
+        return requestRepository.findRequests(status);
+    }
+
+    @Override
+    public Request postRequest(Request request) {
+        return requestRepository.save(request);
     }
 }
