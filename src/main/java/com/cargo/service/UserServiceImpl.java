@@ -1,6 +1,7 @@
 package com.cargo.service;
 
 import com.cargo.entity.Credentials;
+import com.cargo.entity.Key;
 import com.cargo.entity.User;
 import com.cargo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User checkKey(String key) {
+    public Key checkKey(Key key) {
         return userRepository.checkKey(key);
     }
 }

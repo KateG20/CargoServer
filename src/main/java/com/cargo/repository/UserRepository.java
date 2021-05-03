@@ -1,5 +1,6 @@
 package com.cargo.repository;
 
+import com.cargo.entity.Key;
 import com.cargo.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,5 +13,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     // TODO какая-то база ключей
     @Query(value = "SELECT * FROM key WHERE value = ?1",
             nativeQuery = true)
-    User checkKey(String key);
+    Key checkKey(Key key);
 }

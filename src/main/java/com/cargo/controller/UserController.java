@@ -1,6 +1,7 @@
 package com.cargo.controller;
 
 import com.cargo.entity.Credentials;
+import com.cargo.entity.Key;
 import com.cargo.entity.Request;
 import com.cargo.entity.User;
 import com.cargo.service.UserService;
@@ -29,7 +30,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/user/checklogin")
+    @PostMapping("/user/check/credentials")
     public ResponseEntity<User> checkCredentials(@RequestBody Credentials cred) {
         User user = userService.checkCredentials(cred);
         if (user != null) {
@@ -38,11 +39,11 @@ public class UserController {
         return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
     }
 
-    @PostMapping("/user/checkkey")
-    public ResponseEntity<User> checkKey(@RequestBody String key) {
-        User user = userService.checkKey(key);
-        if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
+    @PostMapping("/user/check/key")
+    public ResponseEntity<Key> checkKey(@RequestBody Key key) {
+        Key foundKey = userService.checkKey(key);
+        if (foundKey != null) {
+            return new ResponseEntity<>(foundKey, HttpStatus.OK);
         }
         return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
     }

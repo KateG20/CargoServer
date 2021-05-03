@@ -38,14 +38,18 @@ public class User {
     String company;
 
     @Column
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "request", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "request_id")
-    )
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinTable(
+//            name = "request", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "request_id")
+//    )
     @NonNull
     List<Request> requests;
 
     @Column
     @NonNull
-    String key;
+    Key key;
+
+    @Column
+    @NonNull
+    Boolean verified = false;
 }

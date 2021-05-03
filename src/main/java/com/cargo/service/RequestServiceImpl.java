@@ -21,4 +21,14 @@ public class RequestServiceImpl implements RequestService {
     public Request postRequest(Request request) {
         return requestRepository.save(request);
     }
+
+//    @Override
+//    public List<Request> findAll() {
+//        return requestRepository.findAll();
+//    }
+
+    @Override
+    public void updateRequestStatus(Long id, Integer status) {
+        requestRepository.updateRequestStatus(id, status);
+    }
 }

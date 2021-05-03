@@ -17,7 +17,8 @@ public class Request {
     Long id;
 
     @Column
-    int price;
+    @NonNull
+    Integer price;
 
     @Column
     @NonNull
@@ -28,32 +29,41 @@ public class Request {
     String receiver;
 
     @Column
-    int date;
-
-    @Column
-    int duration;
-
-    @Column
-    int distance;
+    @NonNull
+    Integer date;
 
     @Column
     @NonNull
-    String source; // todo
+    Integer duration;
+
+    @Column
+    @NonNull
+    Integer distance;
+
+    @Column
+    @NonNull
+    String source;
 
     @Column
     @NonNull
     String destination;
 
     @Column
-    int weight;
+    @NonNull
+    Integer weight;
 
     @Column
     @NonNull
     String description;
 
     @Column
-    int status;
+    @NonNull
+    Integer status;
     // 0 - new
     // 1 - current
     // 2 - archive
+
+    @Column
+    @NonNull
+    final Boolean taken = false;
 }
