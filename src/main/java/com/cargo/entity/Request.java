@@ -38,11 +38,11 @@ public class Request {
 
     @Column
     @NonNull
-    String from;
+    String source; // todo
 
     @Column
     @NonNull
-    String to;
+    String destination;
 
     @Column
     int weight;
