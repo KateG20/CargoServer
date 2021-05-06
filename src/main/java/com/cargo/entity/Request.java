@@ -1,10 +1,12 @@
 package com.cargo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -30,11 +32,11 @@ public class Request {
 
     @Column
     @NonNull
-    Integer date;
+    Long date;
 
     @Column
     @NonNull
-    Integer duration;
+    Long duration;
 
     @Column
     @NonNull
@@ -63,7 +65,11 @@ public class Request {
     // 1 - current
     // 2 - archive
 
-    @Column
-    @NonNull
-    final Boolean taken = false;
+//    @Column
+//    @NonNull
+//    final Boolean taken = false;
+
+    @OneToOne(mappedBy = "requests")
+    @JsonIgnore
+    User user;
 }

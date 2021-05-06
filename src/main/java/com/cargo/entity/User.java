@@ -1,5 +1,6 @@
 package com.cargo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -7,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name = "user")
+@Table(name = "userTable")
 @NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor
@@ -37,19 +38,24 @@ public class User {
     @NonNull
     String company;
 
-    @Column
-//    @OneToOne(cascade = CascadeType.ALL)
+    //    @Column
+    @OneToOne(targetEntity = Request.class, cascade = CascadeType.ALL)
 //    @JoinTable(
 //            name = "request", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "request_id")
 //    )
-    @NonNull
+//    @JoinColumn
+//    @NonNull
+            @JsonIgnore
     List<Request> requests;
 
-    @Column
-    @NonNull
-    Key key;
+    //    @Column
+//    @NonNull
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "key", referencedColumnName = "value")
+//    @JsonIgnore
+//    Key key;
 
-    @Column
-    @NonNull
-    Boolean verified = false;
+//    @Column
+//    @NonNull
+//    Boolean verified = false;
 }

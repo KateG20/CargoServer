@@ -1,23 +1,40 @@
 package com.cargo.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Data
 @Table(name = "key")
 @NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class Key {
-    private String value;
+//    @Column
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    Integer id;
 
-    public String getValue() {
-        return value;
-    }
+    @Column(unique = true)
+    @Id
+    @NonNull
+    String value;
+
+//    @OneToOne(mappedBy = "key")
+//    User user;
+
+    @Column
+    @NonNull
+    String name;
+
+    @Column
+    @NonNull
+    @JsonProperty("license_plate")
+    String licensePlate;
+
+    @Column
+    @NonNull
+    String company;
 }

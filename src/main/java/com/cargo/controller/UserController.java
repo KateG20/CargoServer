@@ -8,9 +8,9 @@ import com.cargo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 public class UserController {
@@ -31,6 +31,7 @@ public class UserController {
     }
 
     @PostMapping("/user/check/credentials")
+    @ResponseBody
     public ResponseEntity<User> checkCredentials(@RequestBody Credentials cred) {
         User user = userService.checkCredentials(cred);
         if (user != null) {
@@ -40,8 +41,8 @@ public class UserController {
     }
 
     @PostMapping("/user/check/key")
-    public ResponseEntity<Key> checkKey(@RequestBody Key key) {
-        Key foundKey = userService.checkKey(key);
+    public ResponseEntity<Key> checkKey(@RequestBody Map<String, String> key) {
+        Key foundKey = userService.checkKey(key.get("value"));
         if (foundKey != null) {
             return new ResponseEntity<>(foundKey, HttpStatus.OK);
         }

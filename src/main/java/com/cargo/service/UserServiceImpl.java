@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Key checkKey(Key key) {
+    public Key checkKey(String key) {
         return userRepository.checkKey(key);
     }
 }

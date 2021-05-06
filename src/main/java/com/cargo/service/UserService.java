@@ -8,5 +8,5 @@ import com.cargo.entity.User;
 public interface UserService {
     User createUser(User user);
     User checkCredentials(Credentials cred);
-    Key checkKey(Key key);
+    Key checkKey(String key);
 }

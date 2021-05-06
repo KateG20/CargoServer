@@ -9,11 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface RequestRepository extends JpaRepository<Request, Long> {
-    @Query(value = "SELECT * FROM request WHERE request.status = %1", nativeQuery = true)
+    @Query(value = "SELECT * FROM request WHERE request.status = ?1", nativeQuery = true)
     List<Request> findRequests(int status);
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE Request r SET r.status = %2 WHERE u.id = ?1")
+    @Query(value = "UPDATE Request r SET r.status = ?2 WHERE r.id = ?1")
     void updateRequestStatus(Long id, Integer status);
 }
