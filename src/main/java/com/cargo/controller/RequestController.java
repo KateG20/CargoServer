@@ -51,4 +51,21 @@ public class RequestController {
     public void updateRequestStatus(@RequestBody Request request, @PathVariable Integer status) {
         requestService.updateRequestStatus(request.getId(), status);
     }
+
+    @GetMapping("/requests/filter/{status}/{from}/{to}/{dateFrom}/{dateTo}" +
+            "/{minWeight}/{maxWeight}/{minPrice}/{maxPrice}/{minDist}/{maxDist}")
+    ResponseEntity<List<Request>> getFilteredRequests(@PathVariable Integer status, @PathVariable String from,
+                                                      @PathVariable String to, @PathVariable Long dateFrom,
+                                                      @PathVariable Long dateTo, @PathVariable Integer minWeight,
+                                                      @PathVariable Integer maxWeight, @PathVariable Integer minPrice,
+                                                      @PathVariable Integer maxPrice, @PathVariable Integer minDist,
+                                                      @PathVariable Integer maxDist) {
+        if (from.equals("any")) from = "request.source";
+        if (to.equals("any")) to = "request.destination";
+        // если пустая дата фром, то 0
+        // если пустая дата ту, то 335619200000
+        val ordersList = requestService.getFilteredRequests(status, from, to, dateFrom, dateTo, minWeight,
+                maxWeight, minPrice, maxPrice, minDist, maxDist);
+        return ResponseEntity.ok(ordersList);
+    }
 }

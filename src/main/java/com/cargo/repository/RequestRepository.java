@@ -10,7 +10,15 @@ import java.util.List;
 
 public interface RequestRepository extends JpaRepository<Request, Long> {
     @Query(value = "SELECT * FROM request WHERE request.status = ?1", nativeQuery = true)
-    List<Request> findRequests(int status);
+    List<Request> findRequests(Integer status);
+
+    @Query(value = "SELECT * FROM request WHERE request.status = ?1 AND request.source = ?2 " +
+            "AND request.destination = ?3 AND request.date BETWEEN ?4 AND ?5 AND request.weight BETWEEN ?6 AND ?7 " +
+            "AND request.price BETWEEN ?8 AND ?9 AND request.distance BETWEEN ?10 AND ?11",
+            nativeQuery = true)
+    List<Request> filterRequests(Integer status, String from, String to, Long dateFrom, Long dateTo,
+                                 Integer minWeight, Integer maxWeight, Integer minPrice, Integer maxPrice,
+                                 Integer minDist, Integer maxDist);
 
     @Modifying
     @Transactional

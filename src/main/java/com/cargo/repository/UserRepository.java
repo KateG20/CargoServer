@@ -10,7 +10,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             nativeQuery = true)
     User checkCredentials(String login, String password);
 
-    @Query(value = "SELECT * FROM key WHERE value = ?1",
-            nativeQuery = true)
-    Key checkKey(String key);
+//    @Query(value = "SELECT * FROM key WHERE value = ?1",
+//            nativeQuery = true)
+//    Key checkKey(String key);
 }

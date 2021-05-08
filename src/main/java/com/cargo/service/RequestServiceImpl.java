@@ -31,4 +31,12 @@ public class RequestServiceImpl implements RequestService {
     public void updateRequestStatus(Long id, Integer status) {
         requestRepository.updateRequestStatus(id, status);
     }
+
+    @Override
+    public List<Request> getFilteredRequests(Integer status, String from, String to, Long dateFrom, Long dateTo,
+                                             Integer minWeight, Integer maxWeight, Integer minPrice, Integer maxPrice,
+                                             Integer minDist, Integer maxDist) {
+        return requestRepository.filterRequests(status, from, to, dateFrom, dateTo, minWeight, maxWeight,
+                minPrice, maxPrice, minDist, maxDist);
+    }
 }

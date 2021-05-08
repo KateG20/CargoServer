@@ -9,4 +9,7 @@ public interface RequestService {
     Request postRequest(Request request);
 //    List<Request> findAll();
     void updateRequestStatus(Long id, Integer status);
+    List<Request> getFilteredRequests(Integer status, String from, String to, Long dateFrom, Long dateTo,
+                                      Integer minWeight, Integer maxWeight, Integer minPrice, Integer maxPrice,
+                                      Integer minDist, Integer maxDist);
 }

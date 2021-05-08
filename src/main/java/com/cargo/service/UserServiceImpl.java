@@ -3,6 +3,7 @@ package com.cargo.service;
 import com.cargo.entity.Credentials;
 import com.cargo.entity.Key;
 import com.cargo.entity.User;
+import com.cargo.repository.KeyRepository;
 import com.cargo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,9 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private KeyRepository keyRepository;
 
     @Override
     public User createUser(User user) {
@@ -24,6 +28,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Key checkKey(String key) {
-        return userRepository.checkKey(key);
+        return keyRepository.checkKey(key);
     }
 }
