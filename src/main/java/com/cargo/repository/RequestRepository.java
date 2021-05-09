@@ -12,9 +12,20 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
     @Query(value = "SELECT * FROM request WHERE request.status = ?1", nativeQuery = true)
     List<Request> findRequests(Integer status);
 
-    @Query(value = "SELECT * FROM request WHERE request.status = ?1 AND request.source = ?2 " +
-            "AND request.destination = ?3 AND request.date BETWEEN ?4 AND ?5 AND request.weight BETWEEN ?6 AND ?7 " +
-            "AND request.price BETWEEN ?8 AND ?9 AND request.distance BETWEEN ?10 AND ?11",
+    /*
+SELECT * FROM request WHERE request.status = 0 AND
+(CASE WHEN 'any' != 'any' THEN UPPER(request.source) = UPPER('казань') ELSE TRUE END) AND
+(CASE WHEN 'any' != 'any' THEN UPPER(request.destination) = UPPER('казань') ELSE TRUE END) AND
+            request.date BETWEEN 0 AND 335619200000 AND
+            request.weight BETWEEN 0 AND 100000 AND request.price BETWEEN 0 AND 1000000 AND
+            request.distance BETWEEN 0 AND 100000;
+     */
+
+    @Query(value = "SELECT * FROM request WHERE request.status = ?1 AND " +
+            "(CASE WHEN ?2 != 'any' THEN UPPER(request.source) = UPPER(?2) ELSE TRUE END) AND" +
+            "(CASE WHEN ?3 != 'any' THEN UPPER(request.destination) = UPPER(?3) ELSE TRUE END) AND " +
+            "request.date BETWEEN ?4 AND ?5 AND request.weight BETWEEN ?6 AND ?7 AND request.price " +
+            "BETWEEN ?8 AND ?9 AND request.distance BETWEEN ?10 AND ?11",
             nativeQuery = true)
     List<Request> filterRequests(Integer status, String from, String to, Long dateFrom, Long dateTo,
                                  Integer minWeight, Integer maxWeight, Integer minPrice, Integer maxPrice,

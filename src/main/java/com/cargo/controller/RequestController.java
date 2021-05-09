@@ -52,16 +52,26 @@ public class RequestController {
         requestService.updateRequestStatus(request.getId(), status);
     }
 
-    @GetMapping("/requests/filter/{status}/{from}/{to}/{dateFrom}/{dateTo}" +
-            "/{minWeight}/{maxWeight}/{minPrice}/{maxPrice}/{minDist}/{maxDist}")
-    ResponseEntity<List<Request>> getFilteredRequests(@PathVariable Integer status, @PathVariable String from,
-                                                      @PathVariable String to, @PathVariable Long dateFrom,
-                                                      @PathVariable Long dateTo, @PathVariable Integer minWeight,
-                                                      @PathVariable Integer maxWeight, @PathVariable Integer minPrice,
-                                                      @PathVariable Integer maxPrice, @PathVariable Integer minDist,
-                                                      @PathVariable Integer maxDist) {
-        if (from.equals("any")) from = "request.source";
-        if (to.equals("any")) to = "request.destination";
+    //    @GetMapping("/requests/filter/{status}/{from}/{to}/{dateFrom}/{dateTo}" +
+//            "/{minWeight}/{maxWeight}/{minPrice}/{maxPrice}/{minDist}/{maxDist}")
+//ResponseEntity<List<Request>> getFilteredRequests(@PathVariable Integer status, @PathVariable String from,
+//                                                  @PathVariable String to, @PathVariable Long dateFrom,
+//                                                  @PathVariable Long dateTo, @PathVariable Integer minWeight,
+//                                                  @PathVariable Integer maxWeight, @PathVariable Integer minPrice,
+//                                                  @PathVariable Integer maxPrice, @PathVariable Integer minDist,
+//                                                  @PathVariable Integer maxDist) {
+//@GetMapping("/requests/filter/{status}/{dateFrom}/{dateTo}" +
+//        "/{minWeight}/{maxWeight}/{minPrice}/{maxPrice}/{minDist}/{maxDist}")
+
+    @GetMapping("/requests/filter")
+    ResponseEntity<List<Request>> getFilteredRequests(@RequestParam Integer status, @RequestParam String from,
+                                                      @RequestParam String to, @RequestParam Long dateFrom,
+                                                      @RequestParam Long dateTo, @RequestParam Integer minWeight,
+                                                      @RequestParam Integer maxWeight, @RequestParam Integer minPrice,
+                                                      @RequestParam Integer maxPrice, @RequestParam Integer minDist,
+                                                      @RequestParam Integer maxDist) {
+//        if (from.equals("any")) from = "request.source";
+//        if (to.equals("any")) to = "request.destination";
         // если пустая дата фром, то 0
         // если пустая дата ту, то 335619200000
         val ordersList = requestService.getFilteredRequests(status, from, to, dateFrom, dateTo, minWeight,
