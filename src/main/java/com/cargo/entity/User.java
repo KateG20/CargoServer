@@ -38,15 +38,20 @@ public class User {
     @NonNull
     String company;
 
-    //    @Column
-    @OneToOne(targetEntity = Request.class, cascade = CascadeType.ALL)
+        @Column
+//    @OneToOne(targetEntity = Request.class, cascade = CascadeType.ALL)
 //    @JoinTable(
 //            name = "request", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "request_id")
 //    )
 //    @JoinColumn
 //    @NonNull
-            @JsonIgnore
-    List<Request> requests;
+    @JsonIgnore
+        @ElementCollection(targetClass=Long.class)
+    List<Long> requests; // тут только заявки со статусами 1 и 2
+
+//    @OneToOne(targetEntity = Request.class, cascade = CascadeType.ALL)
+//    @JsonIgnore
+//    List<Request> rejectedRequests; // тут с любыми статусами, изначально с 0
 
     //    @Column
 //    @NonNull

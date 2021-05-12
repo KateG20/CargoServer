@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.List;
@@ -69,7 +70,16 @@ public class Request {
 //    @NonNull
 //    final Boolean taken = false;
 
-    @OneToOne(mappedBy = "requests")
+//    @OneToOne(mappedBy = "requests")
+//    @JsonIgnore
+//    User user;
+
+    @Column
     @JsonIgnore
-    User user;
+    Integer userId;
+
+    @Column(name = "rejected", columnDefinition = "integer[]")
+    @JsonIgnore
+    @ElementCollection(targetClass=Integer.class)
+    List<Integer> rejectedBy;
 }

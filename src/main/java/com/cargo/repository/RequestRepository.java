@@ -9,17 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface RequestRepository extends JpaRepository<Request, Long> {
-    @Query(value = "SELECT * FROM request WHERE request.status = ?1", nativeQuery = true)
-    List<Request> findRequests(Integer status);
+    @Query(value = "SELECT * FROM request WHERE request.status = ?1 AND request.user_id = ?2", nativeQuery = true)
+    List<Request> findRequests(Integer status, Integer userId);
 
-    /*
-SELECT * FROM request WHERE request.status = 0 AND
-(CASE WHEN 'any' != 'any' THEN UPPER(request.source) = UPPER('казань') ELSE TRUE END) AND
-(CASE WHEN 'any' != 'any' THEN UPPER(request.destination) = UPPER('казань') ELSE TRUE END) AND
-            request.date BETWEEN 0 AND 335619200000 AND
-            request.weight BETWEEN 0 AND 100000 AND request.price BETWEEN 0 AND 1000000 AND
-            request.distance BETWEEN 0 AND 100000;
-     */
+    @Query(value = "SELECT * FROM request WHERE request.status = 0 AND " +
+            "?1 != ANY(request_rejected_by.rejected)", nativeQuery = true)
+    List<Request> findNewRequests(Integer userId);
 
     @Query(value = "SELECT * FROM request WHERE request.status = ?1 AND " +
             "(CASE WHEN ?2 != 'any' THEN UPPER(request.source) = UPPER(?2) ELSE TRUE END) AND" +
@@ -35,4 +30,17 @@ SELECT * FROM request WHERE request.status = 0 AND
     @Transactional
     @Query(value = "UPDATE Request r SET r.status = ?2 WHERE r.id = ?1")
     void updateRequestStatus(Long id, Integer status);
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE Request r SET r.userId = ?2 WHERE r.id = ?1")
+    void linkRequestToUser(Long requestId, Integer userId);
+
+    @Modifying
+    @Transactional
+    @Query(value = "INSERT INTO request_rejected_by VALUES (?1, ARRAY[?2]) " +
+            "ON CONFLICT UPDATE request_rejected_by SET rejected_by = " +
+            "array_append(rejected_by, ?2) WHERE request_id = ?1",
+            nativeQuery = true)
+    void rejectRequest(Long requestId, Integer userId);
 }

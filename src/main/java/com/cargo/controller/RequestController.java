@@ -15,21 +15,21 @@ public class RequestController {
     @Autowired
     RequestService requestService;
 
-    @GetMapping("/requests/new")
-    ResponseEntity<List<Request>> getNewRequests() {
-        val ordersList = requestService.findRequests(0);
+    @GetMapping("/requests/new/{userId}")
+    ResponseEntity<List<Request>> getNewRequests(Integer userId) {
+        val ordersList = requestService.findNewRequests(userId);
         return ResponseEntity.ok(ordersList);
     }
 
-    @GetMapping("/requests/current")
-    ResponseEntity<List<Request>> getCurrentRequests() {
-        val ordersList = requestService.findRequests(1);
+    @GetMapping("/requests/current/{userId}")
+    ResponseEntity<List<Request>> getCurrentRequests(Integer userId) {
+        val ordersList = requestService.findRequests(1, userId);
         return ResponseEntity.ok(ordersList);
     }
 
-    @GetMapping("/requests/archive")
-    ResponseEntity<List<Request>> getArchiveRequests() {
-        val ordersList = requestService.findRequests(2);
+    @GetMapping("/requests/archive/{userId}")
+    ResponseEntity<List<Request>> getArchiveRequests(Integer userId) {
+        val ordersList = requestService.findRequests(2, userId);
         return ResponseEntity.ok(ordersList);
     }
 
@@ -46,22 +46,23 @@ public class RequestController {
         }
     }
 
-    @PutMapping("/request/status/{status}")
+    @PutMapping("/request/status/{id}/{status}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateRequestStatus(@RequestBody Request request, @PathVariable Integer status) {
-        requestService.updateRequestStatus(request.getId(), status);
+    public void updateRequestStatus(@PathVariable Long id, @PathVariable Integer newStatus) {
+        requestService.updateRequestStatus(id, newStatus);
     }
 
-    //    @GetMapping("/requests/filter/{status}/{from}/{to}/{dateFrom}/{dateTo}" +
-//            "/{minWeight}/{maxWeight}/{minPrice}/{maxPrice}/{minDist}/{maxDist}")
-//ResponseEntity<List<Request>> getFilteredRequests(@PathVariable Integer status, @PathVariable String from,
-//                                                  @PathVariable String to, @PathVariable Long dateFrom,
-//                                                  @PathVariable Long dateTo, @PathVariable Integer minWeight,
-//                                                  @PathVariable Integer maxWeight, @PathVariable Integer minPrice,
-//                                                  @PathVariable Integer maxPrice, @PathVariable Integer minDist,
-//                                                  @PathVariable Integer maxDist) {
-//@GetMapping("/requests/filter/{status}/{dateFrom}/{dateTo}" +
-//        "/{minWeight}/{maxWeight}/{minPrice}/{maxPrice}/{minDist}/{maxDist}")
+    @PutMapping("/request/add/{requestId}/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void linkRequestToUser(@PathVariable Long requestId, @PathVariable Integer userId) {
+        requestService.linkRequestToUser(requestId, userId);
+    }
+
+    @PutMapping("/request/reject/{requestId}/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void rejectRequest(Long requestId, Integer userId) {
+        requestService.rejectRequest(requestId, userId);
+    }
 
     @GetMapping("/requests/filter")
     ResponseEntity<List<Request>> getFilteredRequests(@RequestParam Integer status, @RequestParam String from,
@@ -77,5 +78,18 @@ public class RequestController {
         val ordersList = requestService.getFilteredRequests(status, from, to, dateFrom, dateTo, minWeight,
                 maxWeight, minPrice, maxPrice, minDist, maxDist);
         return ResponseEntity.ok(ordersList);
+    }
+
+    @PostMapping("/request/add/{userId}")
+    public ResponseEntity<Request> addRequestToUser(@PathVariable Integer userId, @RequestBody Request request) {
+        try {
+            Request addedRequest = requestService.addRequestToUser(userId, request);
+            if (addedRequest == null) {
+                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity<>(addedRequest, HttpStatus.CREATED); // 201
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
