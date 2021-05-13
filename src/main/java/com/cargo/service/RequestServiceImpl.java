@@ -20,9 +20,10 @@ public class RequestServiceImpl implements RequestService {
     EntityManagerFactory entityManagerFactory;
 
     @Override
-    public List<Request> findRequests(Integer status, Integer userId) {
-        return requestRepository.findRequests(status, userId);
+    public List<Request> findCurrentOrArchiveRequests(Integer status, Integer userId) {
+        return requestRepository.findCurrentOrArchiveRequests(status, userId);
     }
+
     @Override
     public List<Request> findNewRequests(Integer userId) {
         return requestRepository.findNewRequests(userId);
@@ -33,22 +34,21 @@ public class RequestServiceImpl implements RequestService {
         return requestRepository.save(request);
     }
 
-//    @Override
-//    public List<Request> findAll() {
-//        return requestRepository.findAll();
-//    }
-
     @Override
     public void updateRequestStatus(Long id, Integer status) {
         requestRepository.updateRequestStatus(id, status);
     }
 
     @Override
-    public List<Request> getFilteredRequests(Integer status, String from, String to, Long dateFrom, Long dateTo,
-                                             Integer minWeight, Integer maxWeight, Integer minPrice, Integer maxPrice,
-                                             Integer minDist, Integer maxDist) {
-        return requestRepository.filterRequests(status, from, to, dateFrom, dateTo, minWeight, maxWeight,
-                minPrice, maxPrice, minDist, maxDist);
+    public List<Request> getFilteredRequests(Integer status, Integer userId, String from, String to, Long dateFrom,
+                                             Long dateTo, Integer minWeight, Integer maxWeight, Integer minPrice,
+                                             Integer maxPrice, Integer minDist, Integer maxDist) {
+        if (status == 0)
+            return requestRepository.filterNewRequests(status, from, to, dateFrom, dateTo, minWeight, maxWeight,
+                    minPrice, maxPrice, minDist, maxDist, userId);
+        else
+            return requestRepository.filterCurrentAndArchiveRequests(status, from, to, dateFrom, dateTo, minWeight,
+                    maxWeight, minPrice, maxPrice, minDist, maxDist, userId);
     }
 
     @Override

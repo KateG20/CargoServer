@@ -16,20 +16,20 @@ public class RequestController {
     RequestService requestService;
 
     @GetMapping("/requests/new/{userId}")
-    ResponseEntity<List<Request>> getNewRequests(Integer userId) {
+    ResponseEntity<List<Request>> getNewRequests(@PathVariable Integer userId) {
         val ordersList = requestService.findNewRequests(userId);
         return ResponseEntity.ok(ordersList);
     }
 
     @GetMapping("/requests/current/{userId}")
-    ResponseEntity<List<Request>> getCurrentRequests(Integer userId) {
-        val ordersList = requestService.findRequests(1, userId);
+    ResponseEntity<List<Request>> getCurrentRequests(@PathVariable Integer userId) {
+        val ordersList = requestService.findCurrentOrArchiveRequests(1, userId);
         return ResponseEntity.ok(ordersList);
     }
 
     @GetMapping("/requests/archive/{userId}")
-    ResponseEntity<List<Request>> getArchiveRequests(Integer userId) {
-        val ordersList = requestService.findRequests(2, userId);
+    ResponseEntity<List<Request>> getArchiveRequests(@PathVariable Integer userId) {
+        val ordersList = requestService.findCurrentOrArchiveRequests(2, userId);
         return ResponseEntity.ok(ordersList);
     }
 
@@ -65,17 +65,17 @@ public class RequestController {
     }
 
     @GetMapping("/requests/filter")
-    ResponseEntity<List<Request>> getFilteredRequests(@RequestParam Integer status, @RequestParam String from,
-                                                      @RequestParam String to, @RequestParam Long dateFrom,
-                                                      @RequestParam Long dateTo, @RequestParam Integer minWeight,
-                                                      @RequestParam Integer maxWeight, @RequestParam Integer minPrice,
-                                                      @RequestParam Integer maxPrice, @RequestParam Integer minDist,
-                                                      @RequestParam Integer maxDist) {
+    ResponseEntity<List<Request>> getFilteredRequests(@RequestParam Integer status, @RequestParam Integer userId,
+                                                      @RequestParam String from, @RequestParam String to,
+                                                      @RequestParam Long dateFrom, @RequestParam Long dateTo,
+                                                      @RequestParam Integer minWeight, @RequestParam Integer maxWeight,
+                                                      @RequestParam Integer minPrice, @RequestParam Integer maxPrice,
+                                                      @RequestParam Integer minDist, @RequestParam Integer maxDist) {
 //        if (from.equals("any")) from = "request.source";
 //        if (to.equals("any")) to = "request.destination";
         // если пустая дата фром, то 0
         // если пустая дата ту, то 335619200000
-        val ordersList = requestService.getFilteredRequests(status, from, to, dateFrom, dateTo, minWeight,
+        val ordersList = requestService.getFilteredRequests(status, userId, from, to, dateFrom, dateTo, minWeight,
                 maxWeight, minPrice, maxPrice, minDist, maxDist);
         return ResponseEntity.ok(ordersList);
     }
