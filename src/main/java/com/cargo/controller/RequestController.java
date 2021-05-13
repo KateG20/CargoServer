@@ -1,22 +1,48 @@
 package com.cargo.controller;
 
 import com.cargo.entity.Request;
+import com.cargo.entity.User;
 import com.cargo.service.RequestService;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class RequestController {
     @Autowired
     RequestService requestService;
 
+    @Autowired
+    UserDetailsService userDetailsService;
+
     @GetMapping("/requests/new/{userId}")
-    ResponseEntity<List<Request>> getNewRequests(@PathVariable Integer userId) {
+    ResponseEntity<List<Request>> getNewRequests(@PathVariable Integer userId, Authentication authentication) {
+//        SecurityContext context = SecurityContextHolder.getContext();
+//        Authentication authentication = context.getAuthentication();
+//        String username = authentication.getName();
+        UserDetails principal = (UserDetails)authentication.getPrincipal();
+        User client = (User)userDetailsService.loadUserByUsername(principal.getUsername());
+        if (client == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (!userId.equals(client.getId())) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
+
+//        Boolean match = client.getOrders().stream().anyMatch(order -> order.getId().equals(Long.valueOf(orderId)));
+//        if (!match) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+//        Optional<Order> order = orderService.findById(Long.valueOf(orderId));
+//        if (!order.isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+
         val ordersList = requestService.findNewRequests(userId);
         return ResponseEntity.ok(ordersList);
     }

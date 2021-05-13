@@ -2,17 +2,20 @@ package com.cargo.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Data
-@Table(name = "userTable")
+@Table(name = "user_table")
 @NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class User {
+public class User implements UserDetails {
     @Column(unique = true)
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -27,15 +30,15 @@ public class User {
     String password;
 
     @Column
-    @NonNull
+//    @NonNull
     String name;
 
     @Column
-    @NonNull
+//    @NonNull
     String licensePlate;
 
     @Column
-    @NonNull
+//    @NonNull
     String company;
 
         @Column
@@ -48,6 +51,36 @@ public class User {
     @JsonIgnore
         @ElementCollection(targetClass=Long.class)
     List<Long> requests; // тут только заявки со статусами 1 и 2
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return getLogin();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
 
 //    @OneToOne(targetEntity = Request.class, cascade = CascadeType.ALL)
 //    @JsonIgnore
