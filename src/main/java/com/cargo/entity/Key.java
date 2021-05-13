@@ -29,9 +29,9 @@ public class Key {
     @NonNull
     String name;
 
-    @Column
+    @Column(name = "license_plate")
     @NonNull
-    @JsonProperty("license_plate")
+//    @JsonProperty("license_plate")
     String licensePlate;
 
     @Column

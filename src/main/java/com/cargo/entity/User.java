@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class User {
-    @Column
+    @Column(unique = true)
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Integer id;
