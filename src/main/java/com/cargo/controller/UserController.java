@@ -17,13 +17,23 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @GetMapping("/login")
+    @ResponseStatus(HttpStatus.OK)
+    public void login() {
+    }
+
     @PostMapping("/user/create")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         try {
+            // Проверяем, что ключ, с которым создавался юзер, существует в базе
+            if (userService.checkKey(user.getKeyValue()) == null)
+                return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+
             User createdUser = userService.createUser(user);
             if (createdUser == null) {
                 return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
             }
+
             return new ResponseEntity<>(createdUser, HttpStatus.CREATED); // 201
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
