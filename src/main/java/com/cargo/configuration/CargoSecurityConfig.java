@@ -25,9 +25,6 @@ public class CargoSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.inMemoryAuthentication().withUser("логин1")
-//                .password(passwordEncoder().encode("password")).roles("USER");
-
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
                 .usersByUsernameQuery("select login,password,enabled "

@@ -15,7 +15,7 @@ public interface RequestService {
     List<Request> getFilteredRequests(Integer status, Integer userId, String from, String to, Long dateFrom,
                                       Long dateTo, Integer minWeight, Integer maxWeight, Integer minPrice,
                                       Integer maxPrice, Integer minDist, Integer maxDist);
-    Request addRequestToUser(Integer userId, Request request);
+//    Request addRequestToUser(Integer userId, Request request);
     void linkRequestToUser(Long requestId, Integer userId);
     void rejectRequest(Long requestId, Integer userId);
 }

@@ -51,26 +51,26 @@ public class RequestServiceImpl implements RequestService {
                     maxWeight, minPrice, maxPrice, minDist, maxDist, userId);
     }
 
-    @Override
-    public Request addRequestToUser(Integer userId, Request request) {
-        EntityManager em = entityManagerFactory.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
-        tx.begin();
-
-        User user = em.find(User.class, userId);
-
-        List<Long> requests = user.getRequests();
-
-        requests.add(request.getId());
-
-        em.persist(user);
-
-        tx.commit();
-
-        em.close();
-
-        return request;
-    }
+//    @Override
+//    public Request addRequestToUser(Integer userId, Request request) {
+//        EntityManager em = entityManagerFactory.createEntityManager();
+//        EntityTransaction tx = em.getTransaction();
+//        tx.begin();
+//
+//        User user = em.find(User.class, userId);
+//
+//        List<Long> requests = user.getRequests();
+//
+//        requests.add(request.getId());
+//
+//        em.persist(user);
+//
+//        tx.commit();
+//
+//        em.close();
+//
+//        return request;
+//    }
 
     @Override
     public void linkRequestToUser(Long requestId, Integer userId) {

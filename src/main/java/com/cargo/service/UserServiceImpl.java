@@ -36,6 +36,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findUserByLogin(String login) {
+        return userRepository.findByLogin(login);
+    }
+
+    @Override
     public User checkCredentials(Credentials cred) {
         return userRepository.checkCredentials(cred.getLogin(), cred.getPassword());
     }

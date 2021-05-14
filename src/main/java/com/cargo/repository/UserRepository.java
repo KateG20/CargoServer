@@ -12,8 +12,4 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query
     User findByLogin(String login);
-
-//    @Query(value = "SELECT * FROM key WHERE value = ?1",
-//            nativeQuery = true)
-//    Key checkKey(String key);
 }

@@ -19,7 +19,12 @@ public class UserController {
 
     @GetMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public void login() {
+    public ResponseEntity<User> login(@RequestParam String login) {
+        User foundUser = userService.findUserByLogin(login);
+        if (foundUser != null) {
+            return new ResponseEntity<>(foundUser, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
     }
 
     @PostMapping("/user/create")
@@ -40,15 +45,15 @@ public class UserController {
         }
     }
 
-    @PostMapping("/user/check/credentials")
-    @ResponseBody
-    public ResponseEntity<User> checkCredentials(@RequestBody Credentials cred) {
-        User user = userService.checkCredentials(cred);
-        if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
-    }
+//    @PostMapping("/user/check/credentials")
+//    @ResponseBody
+//    public ResponseEntity<User> checkCredentials(@RequestBody Credentials cred) {
+//        User user = userService.checkCredentials(cred);
+//        if (user != null) {
+//            return new ResponseEntity<>(user, HttpStatus.OK);
+//        }
+//        return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+//    }
 
     @PostMapping("/user/check/key")
     public ResponseEntity<Key> checkKey(@RequestBody Map<String, String> key) {

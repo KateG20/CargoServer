@@ -41,18 +41,18 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE Request r SET r.status = ?2 WHERE r.id = ?1")
+    @Query(value = "UPDATE request SET status = ?2 WHERE id = ?1", nativeQuery = true)
     void updateRequestStatus(Long id, Integer status);
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE Request r SET r.userId = ?2 WHERE r.id = ?1")
+    @Query(value = "UPDATE request SET user_id = ?2 WHERE id = ?1", nativeQuery = true)
     void linkRequestToUser(Long requestId, Integer userId);
 
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO request_rejected_by VALUES (?1, ARRAY[?2]) " +
-            "ON CONFLICT UPDATE request_rejected_by SET rejected_by = " +
+    @Query(value = "INSERT INTO request_rejected_by (request_id, rejected) VALUES (?1, ARRAY[?2]) " +
+            "ON CONFLICT (request_id) DO UPDATE SET rejected_by = " +
             "array_append(rejected_by, ?2) WHERE request_id = ?1",
             nativeQuery = true)
     void rejectRequest(Long requestId, Integer userId);
