@@ -18,8 +18,9 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
     @Query(value = "SELECT * FROM request WHERE request.status = ?1 AND request.user_id = ?2", nativeQuery = true)
     List<Request> findCurrentOrArchiveRequests(Integer status, Integer userId);
 
-    // todo сюда вставить кусок запроса из findNewRequests, если он работает
     @Query(value = "SELECT * FROM request WHERE request.status = ?1 AND " +
+            "(NOT EXISTS (SELECT TRUE FROM request_rejected_by WHERE " +
+            "request_rejected_by.request_id = request.id AND ?12 = ANY(request_rejected_by.rejected))) AND " +
             "(CASE WHEN ?2 != 'any' THEN UPPER(request.source) = UPPER(?2) ELSE TRUE END) AND" +
             "(CASE WHEN ?3 != 'any' THEN UPPER(request.destination) = UPPER(?3) ELSE TRUE END) AND " +
             "request.date BETWEEN ?4 AND ?5 AND request.weight BETWEEN ?6 AND ?7 AND request.price " +
@@ -51,9 +52,10 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
 
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO request_rejected_by (request_id, rejected) VALUES (?1, ARRAY[?2]) " +
-            "ON CONFLICT (request_id) DO UPDATE SET rejected_by = " +
-            "array_append(rejected_by, ?2) WHERE request_id = ?1",
+    @Query(value = "INSERT INTO request_rejected_by (request_id, rejected) VALUES (1, ARRAY[2]) " +
+            "ON CONFLICT (request_id) " + //--WHERE request_id > 0
+            "DO UPDATE SET rejected = array_append(request_rejected_by.rejected, 2) " +
+            "WHERE request_rejected_by.request_id = 1",
             nativeQuery = true)
     void rejectRequest(Long requestId, Integer userId);
 }

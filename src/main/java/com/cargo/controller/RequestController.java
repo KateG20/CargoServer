@@ -8,15 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class RequestController {
@@ -27,14 +23,13 @@ public class RequestController {
     UserDetailsService userDetailsService;
 
 
-
     @GetMapping("/requests/new/{userId}")
     ResponseEntity<List<Request>> getNewRequests(@PathVariable Integer userId, Authentication authentication) {
 //        SecurityContext context = SecurityContextHolder.getContext();
 //        Authentication authentication = context.getAuthentication();
 //        String username = authentication.getName();
-        UserDetails principal = (UserDetails)authentication.getPrincipal();
-        User user = (User)userDetailsService.loadUserByUsername(principal.getUsername());
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
+        User user = (User) userDetailsService.loadUserByUsername(principal.getUsername());
         if (user == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         if (!userId.equals(user.getId())) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
@@ -51,12 +46,22 @@ public class RequestController {
 
     @GetMapping("/requests/current/{userId}")
     ResponseEntity<List<Request>> getCurrentRequests(@PathVariable Integer userId, Authentication authentication) {
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
+        User user = (User) userDetailsService.loadUserByUsername(principal.getUsername());
+        if (user == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (!userId.equals(user.getId())) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
         val ordersList = requestService.findCurrentOrArchiveRequests(1, userId);
         return ResponseEntity.ok(ordersList);
     }
 
     @GetMapping("/requests/archive/{userId}")
     ResponseEntity<List<Request>> getArchiveRequests(@PathVariable Integer userId, Authentication authentication) {
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
+        User user = (User) userDetailsService.loadUserByUsername(principal.getUsername());
+        if (user == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (!userId.equals(user.getId())) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
         val ordersList = requestService.findCurrentOrArchiveRequests(2, userId);
         return ResponseEntity.ok(ordersList);
     }
@@ -88,7 +93,7 @@ public class RequestController {
 
     @PutMapping("/request/reject/{requestId}/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public void rejectRequest(Long requestId, Integer userId, Authentication authentication) {
+    public void rejectRequest(@PathVariable Long requestId, @PathVariable Integer userId, Authentication authentication) {
         requestService.rejectRequest(requestId, userId);
     }
 
@@ -99,8 +104,6 @@ public class RequestController {
                                                       @RequestParam Integer minWeight, @RequestParam Integer maxWeight,
                                                       @RequestParam Integer minPrice, @RequestParam Integer maxPrice,
                                                       @RequestParam Integer minDist, @RequestParam Integer maxDist, Authentication authentication) {
-//        if (from.equals("any")) from = "request.source";
-//        if (to.equals("any")) to = "request.destination";
         // если пустая дата фром, то 0
         // если пустая дата ту, то 335619200000
         val requestList = requestService.getFilteredRequests(status, userId, from, to, dateFrom, dateTo, minWeight,

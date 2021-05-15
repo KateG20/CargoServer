@@ -41,16 +41,16 @@ public class User implements UserDetails {
 //    @NonNull
     String company;
 
-    @Column
+//    @Column
 //    @OneToOne(targetEntity = Request.class, cascade = CascadeType.ALL)
 //    @JoinTable(
 //            name = "request", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "request_id")
 //    )
 //    @JoinColumn
 //    @NonNull
-    @JsonIgnore
-    @ElementCollection(targetClass = Long.class)
-    List<Long> requests;
+//    @JsonIgnore
+//    @ElementCollection(targetClass = Long.class)
+//    List<Long> requests;
 
     @Column
     String keyValue;
