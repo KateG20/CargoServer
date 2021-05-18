@@ -1,23 +1,18 @@
 package com.cargo.service;
 
 import com.cargo.entity.Request;
-import com.cargo.entity.User;
 import com.cargo.repository.RequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class RequestServiceImpl implements RequestService {
     @Autowired
     private RequestRepository requestRepository;
-
-    @Autowired
-    EntityManagerFactory entityManagerFactory;
 
     @Override
     public List<Request> findCurrentOrArchiveRequests(Integer status, Integer userId) {
@@ -35,8 +30,20 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public void updateRequestStatus(Long id, Integer status) {
-        requestRepository.updateRequestStatus(id, status);
+    @Transactional
+    public boolean updateRequestStatus(Long id, Integer status, Integer userId) {
+        if (status == 1) {
+            // Если вернуло 0, значит ни одна строчка не изменилась => юзер
+            // уже был занят
+            if (requestRepository.linkRequestToUser(id, userId) == 0) {
+                return false;
+            }
+            // Если привязали юзера, меняем статус
+            requestRepository.updateRequestStatus(id, 1);
+        } else if (status == 2) {
+            requestRepository.updateRequestStatus(id, 2);
+        }
+        return true;
     }
 
     @Override
@@ -52,13 +59,16 @@ public class RequestServiceImpl implements RequestService {
     }
 
 
-    @Override
-    public void linkRequestToUser(Long requestId, Integer userId) {
-        requestRepository.linkRequestToUser(requestId, userId);
-    }
+//    @Override
+//    public boolean linkRequestToUser(Long requestId, Integer userId) {
+//        requestRepository.linkRequestToUser(requestId, userId);
+//    }
 
     @Override
     public void rejectRequest(Long requestId, Integer userId) {
-        requestRepository.rejectRequest(requestId, userId);
+        if (requestRepository.findAllById(new ArrayList<>(List.of(requestId))).size() == 0) {
+            requestRepository.addRejectedRequest(requestId, userId);
+        }
+        requestRepository.addRejectingUser(requestId, userId);
     }
 }

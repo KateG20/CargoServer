@@ -1,4 +1,4 @@
-package com.cargo;
+package com.cargo.authentication;
 
 import com.cargo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

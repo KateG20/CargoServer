@@ -47,15 +47,29 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE request SET user_id = ?2 WHERE id = ?1", nativeQuery = true)
-    void linkRequestToUser(Long requestId, Integer userId);
+    @Query(value = "UPDATE request SET user_id = ?2 WHERE id = ?1 AND user_id = null", nativeQuery = true)
+    Integer linkRequestToUser(Long requestId, Integer userId);
+
+//    @Modifying
+//    @Transactional // разделить жту штуку на две
+//    @Query(value = "INSERT INTO request_rejected_by (request_id, rejected) VALUES (1, ARRAY[2]) " +
+//            "ON CONFLICT (request_id) " + //--WHERE request_id > 0
+//            "DO UPDATE SET rejected = array_append(request_rejected_by.rejected, 2) " +
+//            "WHERE request_rejected_by.request_id = 1",
+//            nativeQuery = true)
+//    void rejectRequest(Long requestId, Integer userId);
 
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO request_rejected_by (request_id, rejected) VALUES (1, ARRAY[2]) " +
-            "ON CONFLICT (request_id) " + //--WHERE request_id > 0
-            "DO UPDATE SET rejected = array_append(request_rejected_by.rejected, 2) " +
-            "WHERE request_rejected_by.request_id = 1",
+    @Query(value = "INSERT INTO request_rejected_by (request_id, rejected) VALUES (?1, ARRAY[?2]) ",
             nativeQuery = true)
-    void rejectRequest(Long requestId, Integer userId);
+    void addRejectedRequest(Long requestId, Integer userId);
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE request_rejected_by " +
+            "SET rejected = array_append(request_rejected_by.rejected, ?2) " +
+            "WHERE request_rejected_by.request_id = ?1",
+            nativeQuery = true)
+    void addRejectingUser(Long requestId, Integer userId);
 }

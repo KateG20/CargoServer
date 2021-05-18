@@ -25,20 +25,11 @@ public class RequestController {
 
     @GetMapping("/requests/new/{userId}")
     ResponseEntity<List<Request>> getNewRequests(@PathVariable Integer userId, Authentication authentication) {
-//        SecurityContext context = SecurityContextHolder.getContext();
-//        Authentication authentication = context.getAuthentication();
-//        String username = authentication.getName();
+//
         UserDetails principal = (UserDetails) authentication.getPrincipal();
         User user = (User) userDetailsService.loadUserByUsername(principal.getUsername());
         if (user == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         if (!userId.equals(user.getId())) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-
-
-//        Boolean match = user.getOrders().stream().anyMatch(order -> order.getId().equals(Long.valueOf(orderId)));
-//        if (!match) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-//        Optional<Order> order = orderService.findById(Long.valueOf(orderId));
-//        if (!order.isPresent()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
 
         val ordersList = requestService.findNewRequests(userId);
         return ResponseEntity.ok(ordersList);
@@ -79,17 +70,22 @@ public class RequestController {
         }
     }
 
-    @PutMapping("/request/status/{id}/{status}")
-    @ResponseStatus(HttpStatus.OK)
-    public void updateRequestStatus(@PathVariable Long id, @PathVariable Integer newStatus, Authentication authentication) {
-        requestService.updateRequestStatus(id, newStatus);
+    @PutMapping("/request/status/{id}/{newStatus}/{userId}")
+//    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Boolean> updateRequestStatus(@PathVariable Long id, @PathVariable Integer newStatus, @PathVariable Integer userId, Authentication authentication) {
+//        return requestService.updateRequestStatus(id, newStatus, userId);
+        if (requestService.updateRequestStatus(id, newStatus, userId)) {
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.NOT_MODIFIED);
+        }
     }
 
-    @PutMapping("/request/add/{requestId}/{userId}")
-    @ResponseStatus(HttpStatus.OK)
-    public void linkRequestToUser(@PathVariable Long requestId, @PathVariable Integer userId, Authentication authentication) {
-        requestService.linkRequestToUser(requestId, userId);
-    }
+//    @PutMapping("/request/add/{requestId}/{userId}")
+//    @ResponseStatus(HttpStatus.OK)
+//    public void linkRequestToUser(@PathVariable Long requestId, @PathVariable Integer userId, Authentication authentication) {
+//        requestService.linkRequestToUser(requestId, userId);
+//    }
 
     @PutMapping("/request/reject/{requestId}/{userId}")
     @ResponseStatus(HttpStatus.OK)

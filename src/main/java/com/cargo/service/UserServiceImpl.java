@@ -1,7 +1,6 @@
 package com.cargo.service;
 
 import com.cargo.entity.Authority;
-import com.cargo.entity.Credentials;
 import com.cargo.entity.Key;
 import com.cargo.entity.User;
 import com.cargo.repository.AuthorityRepository;
@@ -40,10 +39,10 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByLogin(login);
     }
 
-    @Override
-    public User checkCredentials(Credentials cred) {
-        return userRepository.checkCredentials(cred.getLogin(), cred.getPassword());
-    }
+//    @Override
+//    public User checkCredentials(Credentials cred) {
+//        return userRepository.checkCredentials(cred.getLogin(), cred.getPassword());
+//    }
 
     @Override
     public Key checkKey(String key) {

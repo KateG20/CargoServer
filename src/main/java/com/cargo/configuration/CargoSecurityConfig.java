@@ -37,15 +37,14 @@ public class CargoSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
+        http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/user/check/key").permitAll()
                 .antMatchers("/user/create").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
-                .authenticationEntryPoint(authenticationEntryPoint)
+//                .authenticationEntryPoint(authenticationEntryPoint)
                 .and()
                 .logout().logoutUrl("/logout").invalidateHttpSession(true).deleteCookies("JSESSIONID");
     }

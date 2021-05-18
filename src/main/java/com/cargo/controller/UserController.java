@@ -1,8 +1,6 @@
 package com.cargo.controller;
 
-import com.cargo.entity.Credentials;
 import com.cargo.entity.Key;
-import com.cargo.entity.Request;
 import com.cargo.entity.User;
 import com.cargo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

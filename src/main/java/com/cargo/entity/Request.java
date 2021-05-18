@@ -56,23 +56,11 @@ public class Request {
     Integer weight;
 
     @Column
-    @NonNull
     String description;
 
     @Column
     @NonNull
     Integer status;
-    // 0 - new
-    // 1 - current
-    // 2 - archive
-
-//    @Column
-//    @NonNull
-//    final Boolean taken = false;
-
-//    @OneToOne(mappedBy = "requests")
-//    @JsonIgnore
-//    User user;
 
     @Column
     @JsonIgnore

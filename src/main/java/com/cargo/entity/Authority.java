@@ -14,11 +14,9 @@ import javax.persistence.Table;
 @AllArgsConstructor
 public class Authority {
     @Column
-//    @NonNull
     @Id
     String login;
 
     @Column
-//    @NonNull
     String authority;
 }

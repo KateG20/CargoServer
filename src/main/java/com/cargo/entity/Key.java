@@ -10,20 +10,11 @@ import javax.persistence.*;
 @Table(name = "key")
 @NoArgsConstructor
 @AllArgsConstructor
-//@RequiredArgsConstructor
 public class Key {
-//    @Column
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    Integer id;
-
     @Column(unique = true)
     @Id
     @NonNull
     String value;
-
-//    @OneToOne(mappedBy = "key")
-//    User user;
 
     @Column
     @NonNull
@@ -31,7 +22,6 @@ public class Key {
 
     @Column(name = "license_plate")
     @NonNull
-//    @JsonProperty("license_plate")
     String licensePlate;
 
     @Column
