@@ -18,6 +18,10 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
     @Query(value = "SELECT * FROM request WHERE request.status = ?1 AND request.user_id = ?2", nativeQuery = true)
     List<Request> findCurrentOrArchiveRequests(Integer status, Integer userId);
 
+    @Query(value = "SELECT * FROM request_rejected_by WHERE request_id = ?1",
+            nativeQuery = true)
+    List<Request> findRejectedRequests(Long id);
+
     @Query(value = "SELECT * FROM request WHERE request.status = ?1 AND " +
             "(NOT EXISTS (SELECT TRUE FROM request_rejected_by WHERE " +
             "request_rejected_by.request_id = request.id AND ?12 = ANY(request_rejected_by.rejected))) AND " +

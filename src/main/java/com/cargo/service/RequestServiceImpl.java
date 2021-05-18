@@ -66,7 +66,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public void rejectRequest(Long requestId, Integer userId) {
-        if (requestRepository.findAllById(new ArrayList<>(List.of(requestId))).size() == 0) {
+        if (requestRepository.findRejectedRequests(requestId).size() == 0) {
             requestRepository.addRejectedRequest(requestId, userId);
         }
         requestRepository.addRejectingUser(requestId, userId);
