@@ -51,7 +51,7 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE request SET user_id = ?2 WHERE id = ?1 AND user_id = null", nativeQuery = true)
+    @Query(value = "UPDATE request SET user_id = ?2 WHERE id = ?1 AND user_id is null", nativeQuery = true)
     Integer linkRequestToUser(Long requestId, Integer userId);
 
 //    @Modifying
