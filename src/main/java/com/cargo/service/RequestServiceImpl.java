@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -57,12 +56,6 @@ public class RequestServiceImpl implements RequestService {
             return requestRepository.filterCurrentAndArchiveRequests(status, from, to, dateFrom, dateTo, minWeight,
                     maxWeight, minPrice, maxPrice, minDist, maxDist, userId);
     }
-
-
-//    @Override
-//    public boolean linkRequestToUser(Long requestId, Integer userId) {
-//        requestRepository.linkRequestToUser(requestId, userId);
-//    }
 
     @Override
     public void rejectRequest(Long requestId, Integer userId) {
