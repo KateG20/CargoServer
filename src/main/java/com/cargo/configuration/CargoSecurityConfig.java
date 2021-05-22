@@ -1,6 +1,7 @@
 package com.cargo.configuration;
 
 import com.cargo.authentication.BasicAuthEntryPoint;
+import com.cargo.controller.CustomCharacterEncodingFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 
 import javax.sql.DataSource;
 
@@ -37,6 +39,7 @@ public class CargoSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.addFilterBefore(new CustomCharacterEncodingFilter(), ChannelProcessingFilter.class);
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/user/check/key").permitAll()

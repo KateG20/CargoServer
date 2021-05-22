@@ -49,6 +49,6 @@ public class UserController {
         if (foundKey != null) {
             return new ResponseEntity<>(foundKey, HttpStatus.OK);
         }
-        return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 }
