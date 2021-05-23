@@ -1,7 +1,7 @@
 package com.cargo.configuration;
 
 import com.cargo.authentication.BasicAuthEntryPoint;
-import com.cargo.controller.CustomCharacterEncodingFilter;
+import com.cargo.CustomCharacterEncodingFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

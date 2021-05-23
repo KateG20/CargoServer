@@ -20,7 +20,14 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<Request> findNewRequests(Integer userId) {
-        return requestRepository.findNewRequests(userId);
+
+        List<Request> list = requestRepository.findNewRequests(userId);
+        Request newr = list.stream()
+                .filter(r -> r.getSource().equals("Новая"))
+                .findAny().orElse(null);
+        if (newr != null)
+            list.add(0, newr);
+        return list;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.cargo.controller;
+package com.cargo;
 
 import org.springframework.web.filter.GenericFilterBean;
 
